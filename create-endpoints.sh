@@ -38,7 +38,7 @@ declare -A INTERFACES
 # Retrieve the cluster information
 
 collect_cluster() {
-  CLUSTER_INFO=$(aws eks describe-cluster --name $CLUSTER_NAME --region $REGION) || exit $?
+  CLUSTER_INFO=$(aws eks describe-cluster --name $NAME --region $REGION) || exit $?
 
   # Extract VPC ID, subnet IDs, and security group IDs
   VPC_ID=$(echo $CLUSTER_INFO | jq -r '.cluster.resourcesVpcConfig.vpcId')
@@ -176,11 +176,11 @@ EOF
     done
 
     if [[ -z $NAME ]]; then
-        echo "Please pass the cluster name"
+        echo "error: the following arguments are required: --name <cluster-name> --region <region>"
         exit 1
     fi
     if [[ -z $REGION ]]; then
-        echo "Please pass the cluster region"
+        echo "error: the following arguments are required: --name <cluster-name> --region <region>"
         exit 1  
     fi
 
