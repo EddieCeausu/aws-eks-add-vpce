@@ -161,6 +161,9 @@ EOF
         input=$2
         temp=("${input,,}")
         SECURITY_GROUPS+=($temp)
+        shift
+        shift
+        ;;
         -*|--*)
         # Handle unrecognized options or arguments here
         echo "Unknown option $key"
