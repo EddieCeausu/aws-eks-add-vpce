@@ -10,11 +10,15 @@ Run this script where AWS CLI is authenticated to access cluster resources and c
 create-endpoint.sh --help
         Welcome to the Private VPC Endpoint tool for EKS 
         
-        Pass the cluster name and region, and we will automatically add the nessesary endpoint to get your EKS cluster up and running (STS, EKS, ECR.API and ECR.DKR, and S3).
+        Pass the cluster name and region to add the nessesary endpoint to get your EKS cluster up and running
+        (STS, EKS, ECR.API and ECR.DKR, and S3).
 
         USAGE:
 
-        create-endpoint.sh --name <cluster-name> --region <region> --securityGroups <security-groups> --extraEndpoints <extra-endpoints>
+        create-endpoint.sh --name <cluster-name> \
+        --region <region> \
+        --securityGroups <security-groups> \
+        --extraEndpoints <extra-endpoints>
         
         ---------------------------------------------------------------
 
