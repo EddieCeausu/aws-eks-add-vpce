@@ -176,10 +176,12 @@ EOF
     done
 
     if [[ -z $NAME ]]; then
-        exit "Please pass the cluster name"
+        echo "Please pass the cluster name"
+        exit 1
     fi
     if [[ -z $REGION ]]; then
-        exit "Please pass the cluster region"
+        echo "Please pass the cluster region"
+        exit 1  
     fi
 
     echo "NAME            = ${NAME}"
