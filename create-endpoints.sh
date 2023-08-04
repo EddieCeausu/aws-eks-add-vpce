@@ -72,16 +72,17 @@ collect_cluster() {
   echo "VPC ID: $VPC_ID"
   # Print the security group IDs
   echo "Security Groups: ${SECURITY_GROUPS[@]}"
+  SUBNETS+=${private_subnets[@]}
 }
 
 add_interfaces() {
-  # We need to add a way to add the gateway endpoint for s3 if the customer does not want to add interfaces. 
+  # We need to add a way to add the gateway endpoint for s3 if the customer does not want to add interface endpoints for s3. 
   # inject core interfaces
   INTERFACES+=("com.amazonaws.REGION.ec2" "com.amazonaws.REGION.ecr.api" "com.amazonaws.REGION.ecr.dkr" "com.amazonaws.REGION.s3" "com.amazonaws.REGION.sts" "com.amazonaws.REGION.eks")
 
   # Extra interfaces
   # extra_interfaces=("com.amazonaws.REGION.elasticloadbalancing" "com.amazonaws.REGION.xray" "com.amazonaws.REGION.logs" "com.amazonaws.REGION.appmesh-envoy-management")
-  INTERFACES=($(sed "s/REGION/${REGION}/g"<<<"${interfaces[@]}"))
+  INTERFACES=($(sed "s/REGION/${REGION}/g"<<<"${INTERFACES[@]}"))
 
   echo "Adding endpoints for private subnets only..."
   echo "Interfaces to add: ${interfaces[@]}"
