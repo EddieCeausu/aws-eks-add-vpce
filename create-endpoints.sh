@@ -72,10 +72,17 @@ collect_cluster() {
   # Print the VPC ID
   echo "VPC ID: $VPC_ID"
   # Print the security group IDs
-  echo "Security Groups: ${SECURITY_GROUPS[@]}"
+  #echo "Security Groups: ${SECURITY_GROUPS[@]}"
   # Add the private subnets to SUBNETS global
   SUBNETS+=${private_subnets[@]}
+  # echo all variables
+  echo "Subnets: ${SUBNETS[@]}"
+  echo "Security Groups: ${SECURITY_GROUPS[@]}"
+  echo "Interfaces: ${INTERFACES[@]}"
+  echo "Extra Endpoints: ${EXTRA_ENDPOINTS[@]}"
 }
+
+
 
 add_interfaces() {
   # We need to add a way to add the gateway endpoint for s3 if the customer does not want to add interface endpoints for s3. 
