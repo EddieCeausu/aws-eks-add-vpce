@@ -34,7 +34,8 @@ declare -A SUBNETS
 declare -A SECURITY_GROUPS
 declare -A EXTRA_ENDPOINTS
 declare -A INTERFACES
-
+INTERFACES+=("com.amazonaws.REGION.ec2" "com.amazonaws.REGION.ecr.api" "com.amazonaws.REGION.ecr.dkr" "com.amazonaws.REGION.s3" "com.amazonaws.REGION.sts" "com.amazonaws.REGION.eks")
+INTERFACES=($(sed "s/REGION/${REGION}/g"<<<"${INTERFACES[@]}"))
 # Retrieve the cluster information
 
 collect_cluster() {
@@ -61,7 +62,7 @@ collect_cluster() {
   done
 
   if [[ ${#private_subnets[@]} -eq 0 ]]; then
-    exit "No private subnets found"
+    exit "No private subnets found. VPC Endpoints are not required if subnets are public"
   fi
 
   echo "Private Subnets: ${private_subnets[@]}"
@@ -72,17 +73,13 @@ collect_cluster() {
   echo "VPC ID: $VPC_ID"
   # Print the security group IDs
   echo "Security Groups: ${SECURITY_GROUPS[@]}"
+  # Add the private subnets to SUBNETS global
   SUBNETS+=${private_subnets[@]}
 }
 
 add_interfaces() {
   # We need to add a way to add the gateway endpoint for s3 if the customer does not want to add interface endpoints for s3. 
   # inject core interfaces
-  INTERFACES+=("com.amazonaws.REGION.ec2" "com.amazonaws.REGION.ecr.api" "com.amazonaws.REGION.ecr.dkr" "com.amazonaws.REGION.s3" "com.amazonaws.REGION.sts" "com.amazonaws.REGION.eks")
-
-  # Extra interfaces
-  # extra_interfaces=("com.amazonaws.REGION.elasticloadbalancing" "com.amazonaws.REGION.xray" "com.amazonaws.REGION.logs" "com.amazonaws.REGION.appmesh-envoy-management")
-  INTERFACES=($(sed "s/REGION/${REGION}/g"<<<"${INTERFACES[@]}"))
 
   echo "Adding endpoints for private subnets only..."
   echo "Interfaces to add: ${interfaces[@]}"
@@ -202,9 +199,7 @@ parse_arguments() {
     #     echo "${i} = ${INTERFACES[$i]}"
     # done
     echo "----------------------------------------" 
-    echo "User Passed these: ${EXTRA_ENDPOINTS[@]}"
-    echo "Which matches:"
-    echo 
+    echo "Here are the extra endpoints you passed: "
     for i in "${EXTRA_ENDPOINTS[@]}"; do
         local a="${PARSE_INTERFACES[$i]}"
         if [ -z "${PARSE_INTERFACES[$i]}" ]; then
