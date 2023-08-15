@@ -236,12 +236,13 @@ check_required_utils() {
 
 init() {
   check_required_utils
+  parse_arguments
   collect_cluster
   add_interfaces
 }
 
 menu $@
-parse_arguments
+
 
 # ======================
 exit 0
