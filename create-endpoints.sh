@@ -103,7 +103,8 @@ add_interfaces() {
 menu() {
     while [[ $# -gt 0 ]]; do
     key="$1"
-    echo $key
+    echo $1
+    echo $2
     case $key in
         --help)
         cat << EOF
