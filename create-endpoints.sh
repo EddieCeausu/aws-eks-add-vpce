@@ -48,6 +48,10 @@ collect_cluster() {
   fi
   # This will give us all of the subnets
   SUBNETS=($(echo $CLUSTER_INFO | jq -r '.cluster.resourcesVpcConfig.subnetIds[]' | tr '\n' ' '))
+  if [[ -z $SUBNETS ]]; then
+    exit "No subnets found"
+  fi
+  # This will give us all of the private subnets
   private_subnets=()
   echo "Subnets: ${SUBNETS[@]}"
   echo "Selecting for private subnets only..."
@@ -60,12 +64,6 @@ collect_cluster() {
       #echo "subnet $s is a public subnet"
     fi
   done
-
-  if [[ -z ${#private_subnets[@]} ]]; then
-    exit "No private subnets found. VPC Endpoints are not required if subnets are public"
-  fi
-
-  echo "Private Subnets: ${private_subnets[@]}"
 
   SECURITY_GROUPS=($(echo $CLUSTER_INFO | jq -r '.cluster.resourcesVpcConfig.securityGroupIds[]' | tr '\n' ' '))
   SECURITY_GROUPS+=($(echo $CLUSTER_INFO | jq -r '.cluster.resourcesVpcConfig.clusterSecurityGroupId'))
