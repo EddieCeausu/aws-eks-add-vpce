@@ -61,7 +61,7 @@ collect_cluster() {
     fi
   done
 
-  if [[ ${#private_subnets[@]} -eq 0 ]]; then
+  if [[ -z ${#private_subnets[@]} ]]; then
     exit "No private subnets found. VPC Endpoints are not required if subnets are public"
   fi
 
@@ -80,9 +80,16 @@ collect_cluster() {
   echo "Security Groups: ${SECURITY_GROUPS[@]}"
   echo "Interfaces: ${INTERFACES[@]}"
   echo "Extra Endpoints: ${EXTRA_ENDPOINTS[@]}"
+
+  # check if Subnets are empty
+  if [[ -z ${#SUBNETS[@]} ]]; then
+    exit "No subnets found"
+  fi
+  # check if security groups are empty
+  if [[ -z ${#SECURITY_GROUPS[@]} ]]; then
+    exit "No security groups found"
+  fi
 }
-
-
 
 add_interfaces() {
   # We need to add a way to add the gateway endpoint for s3 if the customer does not want to add interface endpoints for s3. 
