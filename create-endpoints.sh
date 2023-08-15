@@ -48,7 +48,7 @@ collect_cluster() {
   fi
   # This will give us all of the subnets
   SUBNETS=($(echo $CLUSTER_INFO | jq -r '.cluster.resourcesVpcConfig.subnetIds[]' | tr '\n' ' '))
-  if [[ -z $SUBNETS ]]; then
+  if [[ ${#SUBNETS[@]} -eq 0 ]]; then
     exit "No subnets found"
   fi
   # This will give us all of the private subnets
