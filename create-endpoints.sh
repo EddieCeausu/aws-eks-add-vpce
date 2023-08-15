@@ -167,6 +167,8 @@ EOF
         # Handle unrecognized options or arguments here
         echo "Unknown option $key"
         exit 0
+        shift
+        shift
         ;;
         *)
         shift
