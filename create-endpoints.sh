@@ -172,6 +172,9 @@ EOF
         ;;
     esac
     done
+    echo "NAME            = ${NAME}"
+    echo "REGION          = ${REGION}"
+    echo "EXTRA ENDPOINTS = ${EXTRA_ENDPOINTS[@]}"
 
     if [[ -z $NAME ]]; then
         echo "error: the following arguments are required: --name <cluster-name> --region <region>"
@@ -182,9 +185,6 @@ EOF
         exit 1  
     fi
 
-    echo "NAME            = ${NAME}"
-    echo "REGION          = ${REGION}"
-    echo "EXTRA ENDPOINTS = ${EXTRA_ENDPOINTS[@]}"
     init
 }
 
