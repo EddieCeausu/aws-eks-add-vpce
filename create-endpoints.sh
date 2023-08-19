@@ -48,12 +48,12 @@ collect_cluster() {
   fi
   # This will give us all of the subnets
   SUBNETS=($(echo $CLUSTER_INFO | jq -r '.cluster.resourcesVpcConfig.subnetIds[]' | tr '\n' ' '))
+  echo "Subnets: ${SUBNETS[@]}"
   if [[ ${#SUBNETS[@]} -eq 0 ]]; then
     exit "No subnets found"
   fi
   # This will give us all of the private subnets
   private_subnets=()
-  echo "Subnets: ${SUBNETS[@]}"
   echo "Selecting for private subnets only..."
   for s in "${SUBNETS[@]}"; do
     igw_count=$(aws ec2 describe-route-tables --filters "Name=association.subnet-id,Values=$s" --query "RouteTables[].Routes[]" | grep igw | wc -l)
