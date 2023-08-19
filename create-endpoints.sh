@@ -49,8 +49,8 @@ collect_cluster() {
   # This will give us all of the subnets
   SUBNETS=($(echo $CLUSTER_INFO | jq -r '.cluster.resourcesVpcConfig.subnetIds[]' | tr '\n' ' '))
   # print subnets
-  for i in "{$SUBNETS[@]}"; do
-    echo "subnet: $i"
+  for i in "${SUBNETS[@]}"; do
+    echo "subnet $i"
   done
 
   if [[ ${#SUBNETS[@]} -eq 0 ]]; then
