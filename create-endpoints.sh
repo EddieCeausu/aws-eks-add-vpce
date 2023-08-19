@@ -30,6 +30,7 @@ REQUIRED_UTILS=(
 
 NAME=""
 REGION=""
+SUBNETS=()
 declare -A SECURITY_GROUPS
 declare -A EXTRA_ENDPOINTS
 declare -A INTERFACES
@@ -74,11 +75,6 @@ collect_cluster() {
   #echo "Security Groups: ${SECURITY_GROUPS[@]}"
   # Add the private subnets to SUBNETS global
   SUBNETS+=${private_subnets[@]}
-  # echo all variables
-  echo "Subnets: ${SUBNETS[@]}"
-  echo "Security Groups: ${SECURITY_GROUPS[@]}"
-  echo "Interfaces: ${INTERFACES[@]}"
-  echo "Extra Endpoints: ${EXTRA_ENDPOINTS[@]}"
 
   # check if Subnets are empty
   if [[ -z ${#SUBNETS[@]} ]]; then
@@ -93,8 +89,10 @@ collect_cluster() {
 add_interfaces() {
   # We need to add a way to add the gateway endpoint for s3 if the customer does not want to add interface endpoints for s3. 
   # inject core interfaces
-
-  echo "Adding endpoints for private subnets only..."
+  echo "Subnets: ${SUBNETS[@]}"
+  echo "Security Groups: ${SECURITY_GROUPS[@]}"
+  echo "Interfaces: ${INTERFACES[@]}"
+  echo "Extra Endpoints: ${EXTRA_ENDPOINTS[@]}"
   echo "Interfaces to add: ${interfaces[@]}"
 
   for i in "${INTERFACES[@]}"; do
@@ -200,8 +198,6 @@ EOF
         echo "error: the following arguments are required: --name <cluster-name> --region <region>"
         exit 1  
     fi
-
-    init
 }
 
 parse_arguments() {
@@ -243,7 +239,7 @@ init() {
 }
 
 menu $@
-
+init
 
 # ======================
 exit 0
