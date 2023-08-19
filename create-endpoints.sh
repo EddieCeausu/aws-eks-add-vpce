@@ -30,7 +30,6 @@ REQUIRED_UTILS=(
 
 NAME=""
 REGION=""
-declare -A SUBNETS
 declare -A SECURITY_GROUPS
 declare -A EXTRA_ENDPOINTS
 declare -A INTERFACES
@@ -47,7 +46,6 @@ collect_cluster() {
     exit "VPC ID was not found for cluster"
   fi
   # This will give us all of the subnets
-  echo $CLUSTER_INFO | jq -r '.cluster.resourcesVpcConfig.subnetIds[]' | tr '\n' ' '
   SUBNETS=($(echo $CLUSTER_INFO | jq -r '.cluster.resourcesVpcConfig.subnetIds[]' | tr '\n' ' '))
 
   if [[ ${#SUBNETS[@]} -eq 0 ]]; then
@@ -105,7 +103,7 @@ add_interfaces() {
           --vpc-id "$VPC_ID" \
           --service-name "$i" \
           --vpc-endpoint-type Interface \
-          --subnet-ids "${private_subnets[@]}" \
+          --subnet-ids "${SUBNETS[@]}" \
           --tag-specifications "ResourceType=vpc-endpoint,Tags=[{Key=service,Value=${i##*.}}]" \
           --security-group-id "${SECURITY_GROUPS[@]}"; then
           echo "Added VPC endpoint $i"
