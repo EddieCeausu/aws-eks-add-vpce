@@ -52,9 +52,11 @@ collect_cluster() {
   for i in "{$SUBNETS[@]}"; do
     echo "subnet: $i"
   done
-  
+
   if [[ ${#SUBNETS[@]} -eq 0 ]]; then
     exit "No subnets found"
+  else
+    echo "Subnets found: ${#SUBNETS[@]}"
   fi
   # This will give us all of the private subnets
   private_subnets=()
